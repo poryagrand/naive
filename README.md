@@ -45,3 +45,7 @@ in progress...
 ├── includes.php
 └── index.php
 ```
+
+
+# License
+The NAIVE framework is open-sourced software licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>

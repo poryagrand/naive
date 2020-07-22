@@ -1,0 +1,455 @@
+<?php use \System\Controller\Language; ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo \System\Controller\Route::current()->river()->share("sitename"); ?></title>
+
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/jquery.js","/")); ?>"></script>
+
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/moment/moment_locales.min.js","/")); ?>"></script>
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/moment/moment.min.js","/")); ?>"></script>
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/moment/moment-timezone.js","/")); ?>"></script>
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/moment/locale/fa.js","/")); ?>"></script>
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/moment/moment-jalaali.js","/")); ?>"><script>
+    <?php if (\System\Controller\Language::isRtl()) :  ?> 
+        <script>
+            moment.locale("fa");
+        </script>
+     <?php endif; ?>
+
+    <script src="<?php echo trim(System\Controller\Route::url("public/rtl/js/bootstrap.js","/")); ?>"></script>
+    <link href="<?php echo trim(System\Controller\Route::url("public/rtl/css/bootstrap.css","/")); ?>" rel="stylesheet"/>
+
+    <link href="<?php echo trim(System\Controller\Route::url("public/general/css/app.css","/")); ?>" rel="stylesheet"/>
+    <link href="<?php echo trim(System\Controller\Route::url("public/general/css/dashboard.css","/")); ?>" rel="stylesheet"/>
+
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/app.js","/")); ?>"></script>
+</head>
+<body class="<?php echo  \System\Controller\Language::isRtl() ? "rtl" : "ltr" ; ?>">
+    <div class="sidebar" id="SideMenu">
+        <div class="row pb-5">
+            <div class="col text-center">
+                <img src="<?php echo trim(System\Controller\Route::url("public/general/images/toplogo","/")); ?>-<?php echo \System\Controller\Language::slug(); ?>.png" class="topLogo">
+            </div>
+        </div>
+        <div class="row menu">
+            <div class="col-12">
+                <div class="flex">
+                    <i class="icon-home4"></i>
+                    <span>داشبورد</span>
+                </div>
+            </div>
+        </div>
+        <div class="dotsspliter"></div>
+        <div class="row menu selected">
+            <div class="col-12">
+                <div class="flex">
+                    <i class="icon-gear"></i>
+                    <span>تنظیمات</span>
+                    <i class="icon-arrow-down22"></i>
+                </div>
+            </div>
+            <div class="col-12 submenu">
+                <div class="item"><span>امنیت</span></div>
+                <div class="item selected"><span>مدیران</span></div>
+                <div class="item"><span>کیف پول ها</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="topnav d-flex">
+        <div class="widthOnSize align-self-center">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-md-8 text-center text-md-left">
+                        
+                        <div class="topitemrow">
+                            <div class="topitem">
+                                <i class="mi-notifications budgeMark"></i>
+                            </div>
+
+                            <div class="topitem">
+                                <i class="mi-watch-later"></i>
+                                    <div class="tooltipBox dark">
+        <div class="container">
+            
+                                        <span style="width:100%;font-size: 0.8rem;padding: 0.3rem 1rem;color: #37474f;position: relative;display: block;"></span>
+    <script>
+        (function(cs){
+            $(function(){
+                var span = $(cs).prev();
+                var start = 1595419117;
+                globTimeCallback(function(){
+                    var time = moment.unix(start++).format("jYYYY/jM/jD HH:mm:ss");
+                    span.text(time);
+                });
+            });
+        })(document.currentScript);
+    </script>
+                                
+        </div>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                var prevprev = $(cs).prev().prev();
+                var start = "mouseenter";
+                var end = "mouseleave";
+                var onShow = "return 1;";
+                var onHide = "return 1;";
+                
+                onShow = new Function("box",onShow);
+                onHide = new Function("box",onHide);
+
+                
+
+                prevprev.on(start,function(){
+                    if( $(prev).css("display") == "none" ){
+                        $(prev).fadeIn();
+                        onShow.call(prev,prevprev);
+                    }
+                    else{
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    }
+                });
+                if( end == "" ){
+                    globDocClick(function(e){
+                        if($(e.target).closest(prevprev).length <= 0){
+                            $(prev).fadeOut();
+                            onHide.call(prev,prevprev);
+                        }
+                    });
+                }
+                else{
+                    prevprev.on(end,function(){
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    });
+                }
+            });
+        })(document.currentScript);
+    </script>
+                            </div>
+
+                            <div class="topitem">
+                                <div class="dropdata">
+                                    <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/flags","/")); ?>/<?php echo \System\Controller\Language::icon(); ?>')">&nbsp;</span>
+                                    <span><?php echo ucwords(\System\Controller\Language::get("word.".\System\Controller\Language::name())); ?></span>
+                                    <i class="icon-arrow-down22"></i>
+                                </div>
+                                    <div class="tooltipBox ">
+        <div class="container">
+            
+                                    <?php foreach ( Language::all() as $lang ) {  ?> 
+                                            <div class="selectMenu <?php echo  \System\Controller\Language::slug() == $lang['slug'] ? 'selected' : '' ; ?>">
+        <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/flags","/")); ?>/<?php echo $lang['icon']; ?>')">&nbsp;</span>
+        <span><?php echo ucwords(\System\Controller\Language::get('word.'.$lang['name'])); ?></span>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                prev.get(0).icon = "<?php echo trim(System\Controller\Route::url("public/general/images/flags","/")); ?>/<?php echo $lang['icon']; ?>";
+                prev.get(0).text = "<?php echo ucwords(\System\Controller\Language::get('word.'.$lang['name'])); ?>";
+                prev.get(0).value = "<?php echo $lang['slug']; ?>";
+            });
+        })(document.currentScript);
+    </script>
+                                     <?php } ?>
+                                
+        </div>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                var prevprev = $(cs).prev().prev();
+                var start = "click";
+                var end = "";
+                var onShow = "$(box).find('i').addClass('flip')";
+                var onHide = "$(box).find('i').removeClass('flip')";
+                
+                onShow = new Function("box",onShow);
+                onHide = new Function("box",onHide);
+
+                
+            prev.find('.selectMenu').on('click',function(e){
+                e.preventDefault();
+                var box = prevprev;
+                window.location.href = '?lang='+this.value;
+            });
+            
+
+                prevprev.on(start,function(){
+                    if( $(prev).css("display") == "none" ){
+                        $(prev).fadeIn();
+                        onShow.call(prev,prevprev);
+                    }
+                    else{
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    }
+                });
+                if( end == "" ){
+                    globDocClick(function(e){
+                        if($(e.target).closest(prevprev).length <= 0){
+                            $(prev).fadeOut();
+                            onHide.call(prev,prevprev);
+                        }
+                    });
+                }
+                else{
+                    prevprev.on(end,function(){
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    });
+                }
+            });
+        })(document.currentScript);
+    </script>
+                            </div>
+
+
+                            <div class="topitem">
+                                <div class="dropdata">
+                                    <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".("color/btc").".svg","/")); ?>')">&nbsp;</span>
+                                    <span><?php echo ucwords(\System\Controller\Language::get("currency.bitcoin")); ?></span>
+                                    <i class="icon-arrow-down22"></i>
+                                </div>
+                                    <div class="tooltipBox ">
+        <div class="container">
+            
+
+                                        <div class="selectMenu selected">
+        <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/btc').".svg","/")); ?>')">&nbsp;</span>
+        <span><?php echo ucwords(\System\Controller\Language::get('currency.bitcoin')); ?></span>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                prev.get(0).icon = "<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/btc').".svg","/")); ?>";
+                prev.get(0).text = "<?php echo ucwords(\System\Controller\Language::get('currency.bitcoin')); ?>";
+                prev.get(0).value = "1";
+            });
+        })(document.currentScript);
+    </script>
+
+                                        <div class="selectMenu">
+        <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/eth').".svg","/")); ?>')">&nbsp;</span>
+        <span><?php echo ucwords(\System\Controller\Language::get('currency.etherium')); ?></span>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                prev.get(0).icon = "<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/eth').".svg","/")); ?>";
+                prev.get(0).text = "<?php echo ucwords(\System\Controller\Language::get('currency.etherium')); ?>";
+                prev.get(0).value = "2";
+            });
+        })(document.currentScript);
+    </script>
+
+                                        <div class="selectMenu">
+        <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/d').".svg","/")); ?>')">&nbsp;</span>
+        <span><?php echo ucwords(\System\Controller\Language::get('currency.dash')); ?></span>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                prev.get(0).icon = "<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/d').".svg","/")); ?>";
+                prev.get(0).text = "<?php echo ucwords(\System\Controller\Language::get('currency.dash')); ?>";
+                prev.get(0).value = "3";
+            });
+        })(document.currentScript);
+    </script>
+                                
+        </div>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                var prevprev = $(cs).prev().prev();
+                var start = "click";
+                var end = "";
+                var onShow = "$(box).find('i').addClass('flip')";
+                var onHide = "$(box).find('i').removeClass('flip')";
+                
+                onShow = new Function("box",onShow);
+                onHide = new Function("box",onHide);
+
+                
+            prev.find('.selectMenu').on('click',function(e){
+                e.preventDefault();
+                var box = prevprev;
+                console.log(1)
+            });
+            
+
+                prevprev.on(start,function(){
+                    if( $(prev).css("display") == "none" ){
+                        $(prev).fadeIn();
+                        onShow.call(prev,prevprev);
+                    }
+                    else{
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    }
+                });
+                if( end == "" ){
+                    globDocClick(function(e){
+                        if($(e.target).closest(prevprev).length <= 0){
+                            $(prev).fadeOut();
+                            onHide.call(prev,prevprev);
+                        }
+                    });
+                }
+                else{
+                    prevprev.on(end,function(){
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    });
+                }
+            });
+        })(document.currentScript);
+    </script>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-12 col-md-4 text-center text-md-right">
+                        <div class="topitemrow userTop">
+                            <div class="topitem">
+                                <div class="dropdata">
+                                    <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/1-intro-photo-final.jpg","/")); ?>')">&nbsp;</span>
+                                    <span>پوریا الهی خیبری</span>
+                                    <i class="icon-arrow-down22"></i>
+                                </div>
+                                    <div class="tooltipBox ">
+        <div class="container">
+            
+
+                                        <div class="selectMenu">
+        <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/btc').".svg","/")); ?>')">&nbsp;</span>
+        <span><?php echo ucwords(\System\Controller\Language::get('currency.bitcoin')); ?></span>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                prev.get(0).icon = "<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/btc').".svg","/")); ?>";
+                prev.get(0).text = "<?php echo ucwords(\System\Controller\Language::get('currency.bitcoin')); ?>";
+                prev.get(0).value = "1";
+            });
+        })(document.currentScript);
+    </script>
+
+                                        <div class="selectMenu">
+        <span style="background-image:url('<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/eth').".svg","/")); ?>')">&nbsp;</span>
+        <span><?php echo ucwords(\System\Controller\Language::get('currency.etherium')); ?></span>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                prev.get(0).icon = "<?php echo trim(System\Controller\Route::url("public/general/images/cryptoicons/".('color/eth').".svg","/")); ?>";
+                prev.get(0).text = "<?php echo ucwords(\System\Controller\Language::get('currency.etherium')); ?>";
+                prev.get(0).value = "2";
+            });
+        })(document.currentScript);
+    </script>
+
+                                        <div class="selectMenu">
+        <span class='icon'><i class="icon-exit3"></i></span>
+        <span><?php echo ucwords(\System\Controller\Language::get('word.signout')); ?></span>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                prev.get(0).icon = "icon-exit3";
+                prev.get(0).text = "<?php echo ucwords(\System\Controller\Language::get('word.signout')); ?>";
+                prev.get(0).value = "3";
+            });
+        })(document.currentScript);
+    </script>
+                                
+        </div>
+    </div>
+    <script>
+        (function(cs){
+            $(function(){
+                var prev = $(cs).prev();
+                var prevprev = $(cs).prev().prev();
+                var start = "click";
+                var end = "";
+                var onShow = "$(box).find('i').addClass('flip')";
+                var onHide = "$(box).find('i').removeClass('flip')";
+                
+                onShow = new Function("box",onShow);
+                onHide = new Function("box",onHide);
+
+                
+            prev.find('.selectMenu').on('click',function(e){
+                e.preventDefault();
+                var box = prevprev;
+                console.log(1)
+            });
+            
+
+                prevprev.on(start,function(){
+                    if( $(prev).css("display") == "none" ){
+                        $(prev).fadeIn();
+                        onShow.call(prev,prevprev);
+                    }
+                    else{
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    }
+                });
+                if( end == "" ){
+                    globDocClick(function(e){
+                        if($(e.target).closest(prevprev).length <= 0){
+                            $(prev).fadeOut();
+                            onHide.call(prev,prevprev);
+                        }
+                    });
+                }
+                else{
+                    prevprev.on(end,function(){
+                        $(prev).fadeOut();
+                        onHide.call(prev,prevprev);
+                    });
+                }
+            });
+        })(document.currentScript);
+    </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="widthOnSize">
+            <div class="container-fluid pr-3 pl-3">
+                1
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="widthOnSize">
+            <div class="container-fluid pr-3 pl-3">
+                <?php echo ucwords(\System\Controller\Language::get("site.footer")); ?>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

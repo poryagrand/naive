@@ -1,0 +1,19 @@
+{
+    "name":"english",
+    "font":"Roboto",
+    "icon":"united-states-of-america.svg",
+    "direction":"ltr",
+    "keywords":{
+        "site":{
+            "title":"My Example Web Site",
+            "footer":"all rights reserved for example site"
+        },
+        "word":{
+            "persian":"persian",
+            "english":"english",
+            "signout":"sign out",
+            "login":"login",
+            "dashboard":"dashboard"
+        }
+    }
+}

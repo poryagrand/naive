@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="<?php echo \System\Controller\Language::slug(); ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><?php echo \System\Controller\Route::current()->river()->share("sitename"); ?> - <?php echo \System\Controller\Route::current()->river()->share("title"); ?></title>
+
+    <script src="<?php echo trim(System\Controller\Route::url("public/general/js/jquery.js","/")); ?>"></script>
+
+    <script src="<?php echo trim(System\Controller\Route::url("public/rtl/js/bootstrap.js","/")); ?>"></script>
+    <link href="<?php echo trim(System\Controller\Route::url("public/rtl/css/bootstrap.css","/")); ?>" rel="stylesheet"/>
+
+    <link href="<?php echo trim(System\Controller\Route::url("public/general/css/app.css","/")); ?>" rel="stylesheet"/>
+    <link href="<?php echo trim(System\Controller\Route::url("public/general/css/login.css","/")); ?>" rel="stylesheet"/>
+</head>
+<body class="<?php echo  \System\Controller\Language::isRtl() ? "rtl" : "" ; ?>">
+
+    <div class="container min-vh-100">
+
+        <div class="row h-100">
+            <div class="col-12  align-self-center">
+            
+                <div class="row loginBox">
+                    <div class="col-12 col-md-3 p-0">
+                        <div class="row loginForm">
+                            <div class="col-12">
+                                <div class="row p-5 pl-2 loginTopLogo">
+                                    <div class="col-3 p-0 text-center">
+                                        <img src="<?php echo trim(System\Controller\Route::url("public/general/images/fingerprint.png","/")); ?>"/>
+                                    </div>
+                                    <div class="col-9 p-0 pt-1 pr-3">
+                                        <h5>احراز هویت</h5>
+                                        <span>برای ورود به سامانه، اطلاعات خود را وارد نمایید</span>
+                                    </div>
+                                </div>
+                                <div clas="row">
+                                    <div class="col-12">
+                                           <div class="form-group form-group-feedback form-group-feedback-left bt_inputbox left">
+        <label for="UserName">نام کاربری</label>
+        <div class="input-group bt_innerBox">
+            
+            <input type="text" id="UserName" name="username" value="" class="form-control"   required>
+            
+        </div>
+        
+        <script>
+            (function(){
+                var current = $(document.currentScript).parent();
+                current.find("input").on("focus",function(){
+                    current.addClass("focus");
+                })
+                .on("blur",function(){
+                    current.removeClass("focus");
+                })
+                UserName = {
+                    input:current.find("input"),
+                    box:current,
+                    title:current.find("label"),
+                    desc:current.find("small")
+                };
+            })();
+
+        </script>
+    </div>
+                                    </div>
+                                </div>
+                                <div clas="row">
+                                    <div class="col-12">
+                                           <div class="form-group form-group-feedback form-group-feedback-left bt_inputbox left">
+        <label for="PassWord">رمز عبور</label>
+        <div class="input-group bt_innerBox">
+            
+            <input type="password" id="PassWord" name="password" value="" class="form-control"   required>
+            
+        </div>
+        
+        <script>
+            (function(){
+                var current = $(document.currentScript).parent();
+                current.find("input").on("focus",function(){
+                    current.addClass("focus");
+                })
+                .on("blur",function(){
+                    current.removeClass("focus");
+                })
+                PassWord = {
+                    input:current.find("input"),
+                    box:current,
+                    title:current.find("label"),
+                    desc:current.find("small")
+                };
+            })();
+
+        </script>
+    </div>
+                                    </div>
+                                </div>
+                                <div clas="row">
+                                    <div class="col-12">
+                                        <button class="bt-bg-primary mt-2 mb-2">ورود</button>
+                                    </div>
+                                </div>
+                                <div clas="row">
+                                    <div class="col-12">
+                                            <p class="bt_line mt-4 mb-4">
+        <span>یا</span>
+    </p>
+                                    </div>
+                                </div>
+                                <div clas="row">
+                                    <div class="col-12">
+                                        <button class="bt-bd-primary mt-2 mb-2">ثبت نام</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+
+                                            <div class="bt_checkList p-3">
+        <h6>توجه:</h6>
+        
+                                                    <div class="row m-0 mb-2">
+            <div class="col-1 p-0">
+                <i class='icon-checkmark3' style='color: #76e46d;'></i>
+            </div>
+            <div class="col-11 p-0">
+                
+                                            قبل از هر کاری 
+                                            از وجود نشان سبز رنگ
+                                            <span style="
+                                                display: inline-block;
+                                                background: #fff;
+                                                border: solid 1px #ccc;
+                                                border-radius: 21px;
+                                                padding: 0px 9px;
+                                                direction: ltr;
+                                                text-align: center;
+                                                padding-top: 2px;
+                                            ">
+                                                <i class='icon-lock4' style='color: #4CAF50;font-size: 0.7rem;top: 0px;'></i>
+                                                <span style='font-size: 0.6rem;line-height: 0.7rem;color: #4CAF50;'>HTTPS://</span>
+                                            </span>
+                                            قبل از دامنه (biten.ir) اطمیمان حاصل نمایید.
+                                            
+            </div>
+        </div>
+
+                                                    <div class="row m-0 mb-2">
+            <div class="col-1 p-0">
+                <i class='icon-checkmark3' style='color: #76e46d;'></i>
+            </div>
+            <div class="col-11 p-0">
+                
+                                            رمز عبور را می بایست از طریق اپلیکیشن بیتن ، از قسمت کلید ساز ، ایجاد و در فیلد رمز عبور وارد نمایید. 
+                                            
+            </div>
+        </div>
+                                        
+    </div>
+
+                                    </div>
+                                </div>
+                                <div clas="row">
+                                    <div class="col-12 text-center" style="direction: ltr;font-size: 0.8rem;color: #90a4ae;padding: 8px 0px;">
+                                        &copy; <?php echo date("Y"); ?> All Rights Reserved. BITEN CX
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-block col-md-9 p-0">
+                        <div class="row loginImage">
+                            <div class="col-12 align-self-start">
+                                <div class="row p-3">
+                                    <div class="col-8 text-left">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5 class="circleTextBox">اخبار و اطلاعیه ها</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-9">
+                                                <div class="blacknews">
+                                                    کیف پول ارز دیجیتالی تتر به سیستم اضافه شد. به همین منظور برای هر کاربر 5 تتر واریز خواهد رسید
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <img src="<?php echo trim(System\Controller\Route::url("public/general/images/login-logo.png","/")); ?>" style="width: 6rem;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 align-self-end">
+                                <div class="row p-3">
+                                    <div class="col-12">
+                                        <div class="float-left">
+                                            <div class="storeIcons">
+                                                <a href="#" title="android app">
+                                                    <img src="<?php echo trim(System\Controller\Route::url("public/general/images/googleplay.png","/")); ?>"/>
+                                                </a>
+                                                <a href="#" title="ios app">
+                                                    <img src="<?php echo trim(System\Controller\Route::url("public/general/images/apple.png","/")); ?>"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="float-right backName">
+                                            <p>
+                                                مسجد نصیر الملک
+                                            </p>
+                                            <p>Nasir al-Mulk Mosque</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>

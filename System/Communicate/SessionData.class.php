@@ -133,7 +133,7 @@ class SessionData
                     } else if (gettype($value) == "string") {
                         $exp = (new \DateTime($value))->format("Y-m-d H:i:s");
                     } else if ($value instanceof \DateTime) {
-                        $exp = $exp->format("Y-m-d H:i:s");
+                        $exp = $value->format("Y-m-d H:i:s");
                     }
                     if ($exp !== null) {
                         $this->__expireAt = $exp;

@@ -64,15 +64,7 @@ class Console{
             // through to the standard PHP error handler
             return false;
         }
-   /*     
-        $file = pathinfo($errfile);
-        if( $file['extension'] == "cached" ){
-            $file = explode('_',basename($file["basename"],".cached"),2);
-            if( count($file) > 1 ){
-                $errfile = Route::path("view: ".$file[1]);
-            }
-        }
-*/
+
         $errfile = "file:///".$errfile;
         if( $errno == E_ERROR || $errno == E_USER_ERROR || $errno == E_CORE_ERROR || $errno == E_RECOVERABLE_ERROR  ){
             self::error("\t╔ Server Error:\n\t╠═ [$errno] $errstr\n\t╚═ Fatal error on line $errline in file $errfile , PHP " . PHP_VERSION . " (" . PHP_OS . ")");
@@ -254,8 +246,7 @@ class Console{
         if( Route::hasError() ){
             return;
         }
-        //var_dump($_SESSION["ConsoleData"]);
-        //die();
+
         if(!self::$showConsoles){
             BasicSession::remove("ConsoleData");
             BasicSession::set("ConsoleData",[]);
@@ -279,7 +270,7 @@ class Console{
             echo "<script>".$consoles."</script>";
         }
 
-        //file_put_contents(__ROOT__."/debug.log","Console: " . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}".PHP_EOL , FILE_APPEND | LOCK_EX);
+      
         BasicSession::remove("ConsoleData");
         BasicSession::set("ConsoleData",[]);
         if( $isHalt ){

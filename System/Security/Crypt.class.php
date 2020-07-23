@@ -24,15 +24,30 @@ class Crypt{
     const RAND_HASH = 8;
     const RAND_FLOAT = 16;
 
+    /**
+     * set default encryption key
+     * @param string $key
+     * @return void
+     */
     public static function setSecKey($key){
         self::$SEC_KEY = $key;
     }
 
+    /**
+     * set default hash key
+     * @param string $key
+     * @return void
+     */
     public static function setHashKey($key){
         self::$HASH_KEY = $key;
     }
 
 
+    /**
+     * @param int $len
+     * @param int $type
+     * @return int|string
+     */
     public static function random($len=6,$type=1){
         if( $type > 16 || $type < 2 ){
             $type = 2;
@@ -126,6 +141,11 @@ class Crypt{
     }
 
 
+    /**
+     * generate random strong password
+     * @param int $len
+     * @return string
+     */
     public static function genPassword($len=8){
         $base32_alphabet='Q1!a2A@b3#Bcw4$eR5%Cf6^g7D&vh8*iu9E(jS0)Fk-Y_zGl=+mH[{Tn]}nIv\J\|o\'J"pX;K:qL/?rM.>NxsO,<Pt';
         $password_length=$len; // The length of the password to generate
@@ -286,7 +306,7 @@ class Crypt{
     }
 
     /**
-     * get the current unix time 
+     * get the current unix time or formated (GMT)
      * @param int $Offset
      * @param bool $Format
      * @return int|string
@@ -316,6 +336,11 @@ class Crypt{
         Session::closeSecure();
     }
 
+    /**
+     * get generated CSRF of the name
+     * @param string $name
+     * @return string
+     */
     public static function getCSRF($name){
         if( Session::has($name) ){
             $token = "";
@@ -328,6 +353,11 @@ class Crypt{
         return false;
     }
 
+    /**
+     * generate or get if exists the CSRF token
+     * @param string $name
+     * @return string
+     */
     public static function getOrGenerateIfNotExist($name){
         $csrf = self::getCSRF($name);
         if( !$csrf ){
@@ -336,6 +366,12 @@ class Crypt{
         return self::getCSRF($name);
     }
 
+    /**
+     * check if the `name` CSRF is same is input
+     * @param string $name
+     * @param string $csrf
+     * @return bool
+     */
     public static function checkCSRF($name,$csrf){
         $check = false;
         if( Session::has($name) ){
@@ -349,32 +385,12 @@ class Crypt{
         }
         return $check;
     }
-    /*
-    public static function eval($phpCode) {
-        $handle = tmpfile();
-        $tmpfname = stream_get_meta_data($handle)["uri"];
-        fwrite($handle, "<?php\n try{" . $phpCode . ";}catch(\Exception \$ee){}");
-        
-        $val = null;
-        if( !preg_match("!No syntax errors detected!",shell_exec(sprintf("php -l %s 2>&1",escapeshellarg($tmpfname)))) ){
-            fclose($handle);
-            return null;
-        }
-        ob_start();
-        try{
-            $val = ( include $tmpfname );
-        }
-        catch(\Exception $ee){$val = null;}
-        ob_end_clean();
-        fclose($handle);
-        $err = Console::getLastError();
-        if( $err !== null && $err["file"] == $tmpfname ){
-            error_clear_last();
-            return null;
-        }
-        return $val;
-    }
-    */
+    
+    /**
+     * evaluate the input in php
+     * @param string $phpCode
+     * @return mixed
+     */
     public static function eval($phpCode){
         try{
             try{
@@ -393,6 +409,11 @@ class Crypt{
      // public-private key encryption
     //===========================\/
 
+
+    /**
+     * generate RSA key-pair
+     * @return void
+     */
     public static function generateAsymKeys(){
         // Set the key parameters
         $config = array(
@@ -414,6 +435,12 @@ class Crypt{
         self::$private_key = $privKey;
     }
 
+
+    /**
+     * get generated public key or set new one
+     * @param string $key optional
+     * @return string
+     */
     public static function publicKey($key=null){
         if( is_string($key) ){
             self::$public_key = $key;
@@ -421,6 +448,11 @@ class Crypt{
         return self::$public_key;
     }
 
+    /**
+     * get generated private key or set new one
+     * @param string $key optional
+     * @return string
+     */
     public static function privateKey($key=null){
         if( is_string($key) ){
             self::$private_key = $key;
@@ -428,6 +460,11 @@ class Crypt{
         return self::$private_key;
     }
 
+    /**
+     * RSA encrypt with public key
+     * @param string $data
+     * @return string
+     */
     public static function asymEncrypt($data){
         // Encrypt the data using the public key
         openssl_public_encrypt($data, $encryptedData, self::$public_key);
@@ -435,11 +472,42 @@ class Crypt{
         return $encryptedData;
     }
 
+
+    /**
+     * RSA decrypt with private key
+     * @param string $enc
+     * @return string
+     */
     public static function asymDecrypt($enc){
-        // Encrypt the data using the public key
+        // dcrypt the data using the private key
         openssl_private_decrypt($enc, $decryptedData, self::$private_key);
 
+        // Return decrypted data
+        return $decryptedData;
+    }
+
+    /**
+     * RSA encrypt with private key
+     * @param string $data
+     * @return string
+     */
+    public static function asymPrivEncrypt($data){
+        // Encrypt the data using the private key
+        openssl_private_encrypt($data, $encryptedData, self::$private_key);
         // Return encrypted data
+        return $encryptedData;
+    }
+
+    /**
+     * RSA decrypt with public key
+     * @param string $enc
+     * @return string
+     */
+    public static function asymPubDecrypt($enc){
+        // dcrypt the data using the public key
+        openssl_public_decrypt ($enc, $decryptedData, self::$public_key);
+
+        // Return decrypted data
         return $decryptedData;
     }
 

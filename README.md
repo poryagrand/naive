@@ -8,7 +8,7 @@ naive is an open source php framework on MVC architecture.
 client side uses <a href="https://github.com/poryagrand/SilverRiver" alt="Silver River template engine">Silver River</a> as template engine.
 
 # Wiki
-in progress...
+learn more from <a href="https://github.com/poryagrand/naive/wiki/Getting-Started">Github Wiki</a>
 
 # Folder Structure
 

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="<?php echo \System\Controller\Language::slug(); ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><?php echo \System\Controller\Route::current()->river()->share("sitename"); ?> - <?php echo \System\Controller\Route::current()->river()->share("title"); ?></title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+</head>
+<body class="<?php echo  \System\Controller\Language::isRtl() ? "rtl" : "" ; ?>">
+
+    in progress...
+    
+</body>
+</html>

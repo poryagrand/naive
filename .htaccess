@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    Options -Indexes
+    
+    
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
+    
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteCond %{REQUEST_URI} !^/$
+    RewriteRule ^ fault/403 [QSA,L]
+    
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule \.*$ fault/403
+    
+    </IfModule>

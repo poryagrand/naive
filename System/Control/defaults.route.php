@@ -3,6 +3,7 @@ use System\Controller\Route;
 use System\Controller\Response;
 
 Route::register("fault/403")
+    ->get([])
     ->attach("noConsole",true)
     ->handle(function($req,$res){
         $res->setHeaderHttpCode( Response::FORBIDDEN );
@@ -27,6 +28,7 @@ Route::register("fault/403")
     });
 
 Route::register("fault/404")
+    ->get([])
     ->attach("noConsole",true)
     ->handle(function($req,$res){
 

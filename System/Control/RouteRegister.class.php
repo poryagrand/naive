@@ -85,20 +85,12 @@ class RouteRegister{
         $this->__middlewares = ($init!==null && isset($init["middlewares"])) ? $init["middlewares"] : array();
         $this->__handler = function(){};
         $this->__file = $filename;
-        $this->__methods = array(
-            "get"=>array()
-        );
+        $this->__methods = array();
 
-        if( $init!==null && isset($init["get"]) ){
-            $this->__methods["get"] = $init["get"];
-        }
-
-        if( $init!==null && isset($init["post"]) ){
-            $this->__methods["post"] = $init["post"];
-        }
-
-        if( $init!==null && isset($init["file"]) ){
-            $this->__methods["file"] = $init["file"];
+        foreach(Route::ACCEPTABLE_METHODS as $meth){
+            if( $init!==null && isset($init[$meth]) ){
+                $this->__methods[$meth] = $init[$meth];
+            }
         }
 
         if( $init!==null && isset($init["error"]) ){
@@ -526,38 +518,64 @@ class RouteRegister{
     public function validateMethod($reqMethod){
         $output = array();
         foreach( $this->__methods as $method=>&$list ){
+            $param = [];
             if( $method == "get" || $method == "post" || $method == "file" ){
                 $param = ($method == "get"?$_GET:($method == "post"?$_POST:$_FILES));
-                $output[$method] = array();
-                foreach( $list as $key=>&$val ){
-                    $output[$method][$key] = isset( $param[$key] )?$param[$key]:null;
-                    if( Route::hasFilter($val) ){
-                        $isArray = true;
-                        if( !is_array($output[$method][$key]) || !isset($output[$method][$key][0]) ){
-                            $output[$method][$key] = [$output[$method][$key]];
-                            $isArray = false;
-                        }
-                        foreach($output[$method][$key] as $pkey=>$pval){
-                            $res = Route::callFilter($val,$pval);
-                            if( $res === Route::NotValid && ($reqMethod == $method || $method=="file") ){
-                                $this->fireError(Route::MethodParams,$method,$key,$pval);
-                                return false;
-                            }
-                            else{
-                                $output[$method][$key][$pkey] = $res;
-                            }
-                        }
-                        if( !$isArray ){
-                            $paramCount = count($output[$method][$key]);
-                            if( $paramCount > 0 && $paramCount <= 1 ){
-                                $output[$method][$key] = $output[$method][$key][0];
-                            }
-                        }
-                        
+            }
+            else{
+                $input = file_get_contents("php://input");
+                try{
+                    $input = @json_decode($input,true);
+                    if( $input ){
+                        $param = $input;
+                    }
+                }
+                catch(\Throwable $ee){$input = null;}
+
+                if( !$input ){
+                    parse_str(file_get_contents("php://input"),$inputRes);
+                    if( $inputRes ){
+                        $param = $inputRes;
                     }
                     else{
-                        return false;
+                        $param = [];
                     }
+                }
+            }
+
+            
+
+            $output[$method] = array();
+
+
+            foreach( $list as $key=>&$val ){
+                $output[$method][$key] = isset( $param[$key] )?$param[$key]:null;
+                if( Route::hasFilter($val) ){
+                    $isArray = true;
+                    if( !is_array($output[$method][$key]) || !isset($output[$method][$key][0]) ){
+                        $output[$method][$key] = [$output[$method][$key]];
+                        $isArray = false;
+                    }
+                    foreach($output[$method][$key] as $pkey=>$pval){
+                        $res = Route::callFilter($val,$pval);
+                        if( $res === Route::NotValid && ($reqMethod == $method || $method=="file") ){
+                            $this->fireError(Route::MethodParams,$method,$key,$pval);
+                            return false;
+                        }
+                        else{
+                            $output[$method][$key][$pkey] = $res;
+                        }
+                    }
+                    if( !$isArray ){
+                        $paramCount = count($output[$method][$key]);
+                        if( $paramCount > 0 && $paramCount <= 1 ){
+                            $output[$method][$key] = $output[$method][$key][0];
+                        }
+                    }
+                    
+                }
+                else{
+                    return false;
                 }
             }
         }
@@ -686,22 +704,222 @@ class RouteRegister{
     }
 
     /**
-     * insert delete method
+     * set put paramteres validations
+     * @param array $params
      * @return RouteRegister
+     * @throws RouteHandleException
      */
-    public function delete(){
-        $this->__methods["delete"] = array();
+    public function put( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("put method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["put"]) ){
+            $this->__methods["put"] = [];
+        }
+        $this->__methods["put"] = $this->__methods["put"] + $params;
         return $this;
     }
 
     /**
-     * insert put method
+     * set view paramteres validations
+     * @param array $params
      * @return RouteRegister
+     * @throws RouteHandleException
      */
-    public function put(){
-        $this->__methods["put"] = array();
+    public function view( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("view method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["view"]) ){
+            $this->__methods["view"] = [];
+        }
+        $this->__methods["view"] = $this->__methods["view"] + $params;
         return $this;
     }
+
+    /**
+     * set propfind paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function propfind( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("propfind method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["propfind"]) ){
+            $this->__methods["propfind"] = [];
+        }
+        $this->__methods["propfind"] = $this->__methods["propfind"] + $params;
+        return $this;
+    }
+
+    /**
+     * set unlock paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function unlock( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("unlock method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["unlock"]) ){
+            $this->__methods["unlock"] = [];
+        }
+        $this->__methods["unlock"] = $this->__methods["unlock"] + $params;
+        return $this;
+    }
+
+    /**
+     * set lock paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function lock( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("lock method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["lock"]) ){
+            $this->__methods["lock"] = [];
+        }
+        $this->__methods["lock"] = $this->__methods["lock"] + $params;
+        return $this;
+    }
+
+    /**
+     * set purge paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function purge( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("purge method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["purge"]) ){
+            $this->__methods["purge"] = [];
+        }
+        $this->__methods["purge"] = $this->__methods["purge"] + $params;
+        return $this;
+    }
+
+    /**
+     * set unlink paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function unlink( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("unlink method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["unlink"]) ){
+            $this->__methods["unlink"] = [];
+        }
+        $this->__methods["unlink"] = $this->__methods["unlink"] + $params;
+        return $this;
+    }
+
+    /**
+     * set link paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function link( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("link method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["link"]) ){
+            $this->__methods["link"] = [];
+        }
+        $this->__methods["link"] = $this->__methods["link"] + $params;
+        return $this;
+    }
+
+    /**
+     * set options paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function options( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("options method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["options"]) ){
+            $this->__methods["options"] = [];
+        }
+        $this->__methods["options"] = $this->__methods["options"] + $params;
+        return $this;
+    }
+
+    /**
+     * set copy paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function copy( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("copy method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["copy"]) ){
+            $this->__methods["copy"] = [];
+        }
+        $this->__methods["copy"] = $this->__methods["copy"] + $params;
+        return $this;
+    }
+
+    /**
+     * set delete paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function delete( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("delete method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["delete"]) ){
+            $this->__methods["delete"] = [];
+        }
+        $this->__methods["delete"] = $this->__methods["delete"] + $params;
+        return $this;
+    }
+
+    /**
+     * set patch paramteres validations
+     * @param array $params
+     * @return RouteRegister
+     * @throws RouteHandleException
+     */
+    public function patch( $params ){
+        if( !is_array($params) ){
+            throw new RouteHandleException("patch method params must be an assoc array!");
+        }
+        $tmp = &$this->__methods;
+        if( !isset($tmp["patch"]) ){
+            $this->__methods["patch"] = [];
+        }
+        $this->__methods["patch"] = $this->__methods["patch"] + $params;
+        return $this;
+    }
+
+    
 
     /**
      * add middleware between to do checks on request
@@ -755,6 +973,9 @@ class RouteRegister{
         }
         if( $type & Route::MethodParams ){
             $tmp[Route::MethodParams] = $callback;
+        }
+        if( $type & Route::Method ){
+            $tmp[Route::Method] = $callback;
         }
         if( $type & Route::Others ){
             $tmp[Route::Others] = $callback;

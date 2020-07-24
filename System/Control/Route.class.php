@@ -33,6 +33,13 @@ class Route{
     const ALL = 0x32ab;
 
 
+    const ACCEPTABLE_METHODS = [
+        "post","get","file","put","delete","patch",
+        "copy","options","link","unlink","purge","lock",
+        "unlock","propfind","view"
+    ];
+
+
     const ROOT = __ROOT__;
     const HOST = __HOST__;
     const UPLOAD = self::ROOT . DIRECTORY_SEPARATOR. "Upload" . DIRECTORY_SEPARATOR;
@@ -565,11 +572,17 @@ class Route{
             $value["path"] = (isset($val["path"]) && is_string($val["path"])) ? $val["path"] : null;
             $value["error"] = (isset($val["error"]) && is_callable($val["error"])) ? $val["error"] : null;
             $value["output"] = (isset($val["output"]) && is_callable($val["output"])) ? $val["output"] : null;
-            $value["middlewares"] = (isset($val["middlewares"]) && is_array($val["middlewares"])) ? $val["middlewares"] : [];
-            $value["get"] = (isset($val["get"]) && is_array($val["get"])) ? $val["get"] : [];
-            $value["post"] = (isset($val["post"]) && is_array($val["post"])) ? $val["post"] : [];
-            $value["file"] = (isset($val["file"]) && is_array($val["file"])) ? $val["file"] : [];
-            $value["attaches"] = (isset($val["attaches"]) && is_array($val["attaches"])) ? $val["attaches"] : [];
+            $value["middlewares"] = (isset($val["middlewares"]) && is_array($val["middlewares"])) ? $val["middlewares"] : null;
+            $value["attaches"] = (isset($val["attaches"]) && is_array($val["attaches"])) ? $val["attaches"] : null;
+    
+            foreach(self::ACCEPTABLE_METHODS as $meth){
+                if( isset($val[$meth]) && is_array($val[$meth]) ){
+                    $value[$meth] = $val[$meth];
+                }
+                else{
+                    $value[$meth] = null;
+                }
+            }
             self::$GroupListData[$name] = $value;
         }
     }
@@ -584,15 +597,19 @@ class Route{
             if( isset(self::$GroupListData[$name]) && is_callable($callback) ){
                 self::$CurrentGroupName = self::$GroupListData[$name];
                 $ref = &self::$GroupListData[$name];
-                call_user_func(
+
+                $args = [$ref["path"],$ref["error"],$ref["middlewares"],$ref["output"]];
+        
+                $methods = [];
+                foreach(self::ACCEPTABLE_METHODS as $meth){
+                    $methods[$meth] = $ref[$meth];
+                }
+
+                $args[] = $methods;
+
+                call_user_func_array(
                     $callback,
-                    (isset($ref["path"]) && is_string($ref["path"])) ? $ref["path"] : null,
-                    (isset($ref["error"]) && is_callable($ref["error"])) ? $ref["error"] : null,
-                    (isset($ref["middlewares"]) && is_array($ref["middlewares"])) ? $ref["middlewares"] : null,
-                    (isset($ref["get"]) && is_array($ref["get"])) ? $ref["get"] : null,
-                    (isset($ref["post"]) && is_array($ref["post"])) ? $ref["post"] : null,
-                    (isset($ref["file"]) && is_array($ref["file"])) ? $ref["file"] : null,
-                    (isset($ref["output"]) && is_callable($ref["output"])) ? $ref["output"] : null
+                    $args
                 );
             }
         }

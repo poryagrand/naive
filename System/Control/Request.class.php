@@ -177,6 +177,128 @@ class Request{
     }
 
     /**
+     * the view data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function view($key=null,$value=null){
+        return $this->methodsData("view",$key,$value);
+    }
+
+    /**
+     * the propfind data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function propfind($key=null,$value=null){
+        return $this->methodsData("propfind",$key,$value);
+    }
+
+    /**
+     * the unlock data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function unlock($key=null,$value=null){
+        return $this->methodsData("unlock",$key,$value);
+    }
+
+    /**
+     * the lock data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function lock($key=null,$value=null){
+        return $this->methodsData("lock",$key,$value);
+    }
+
+    /**
+     * the purge data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function purge($key=null,$value=null){
+        return $this->methodsData("purge",$key,$value);
+    }
+
+    /**
+     * the unlink data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function unlink($key=null,$value=null){
+        return $this->methodsData("unlink",$key,$value);
+    }
+
+    /**
+     * the link data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function link($key=null,$value=null){
+        return $this->methodsData("link",$key,$value);
+    }
+
+    /**
+     * the options data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function options($key=null,$value=null){
+        return $this->methodsData("options",$key,$value);
+    }
+
+    /**
+     * the copy data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function copy($key=null,$value=null){
+        return $this->methodsData("copy",$key,$value);
+    }
+
+    /**
+     * the patch data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function patch($key=null,$value=null){
+        return $this->methodsData("patch",$key,$value);
+    }
+
+
+    /**
+     * the delete data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function delete($key=null,$value=null){
+        return $this->methodsData("delete",$key,$value);
+    }
+
+
+    /**
+     * the put data list
+     * @param string $key
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function put($key=null,$value=null){
+        return $this->methodsData("put",$key,$value);
+    }
+
+    /**
      * the GET data list
      * @param string $key
      * @param mixed $value

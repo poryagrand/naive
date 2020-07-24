@@ -346,7 +346,129 @@ River::directiveInline("include", function ($ref, $arg) {
 
 
 // requests
-River::directiveInline("get", function ($ref, $arg, $exec) {
+
+River::directiveInline("method.view", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("view directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->view($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->view($arg)";
+});
+
+River::directiveInline("method.propfind", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("propfind directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->propfind($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->propfind($arg)";
+});
+
+River::directiveInline("method.unlock", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("unlock directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->unlock($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->unlock($arg)";
+});
+
+River::directiveInline("method.lock", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("lock directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->lock($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->lock($arg)";
+});
+
+River::directiveInline("method.purge", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("purge directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->purge($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->purge($arg)";
+});
+
+River::directiveInline("method.unlink", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("unlink directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->unlink($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->unlink($arg)";
+});
+
+River::directiveInline("method.link", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("link directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->link($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->link($arg)";
+});
+
+River::directiveInline("method.options", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("options directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->options($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->options($arg)";
+});
+
+River::directiveInline("method.copy", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("copy directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->copy($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->copy($arg)";
+});
+
+River::directiveInline("method.patch", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("patch directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->patch($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->patch($arg)";
+});
+
+River::directiveInline("method.delete", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("delete directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->delete($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->delete($arg)";
+});
+
+River::directiveInline("method.put", function ($ref, $arg, $exec) {
+    if (empty($arg)) {
+        return Console::halt("put directive needs arguments!");
+    }
+    if (!$exec) {
+        return "<?php echo \\System\\Controller\\Route::current()->req()->put($arg); ?>";
+    }
+    return "\\System\\Controller\\Route::current()->req()->put($arg)";
+});
+
+
+River::directiveInline("method.get", function ($ref, $arg, $exec) {
     if (empty($arg)) {
         return Console::halt("get directive needs arguments!");
     }
@@ -356,7 +478,7 @@ River::directiveInline("get", function ($ref, $arg, $exec) {
     return "\\System\\Controller\\Route::current()->req()->get($arg)";
 });
 
-River::directiveInline("post", function ($ref, $arg, $exec) {
+River::directiveInline("method.post", function ($ref, $arg, $exec) {
     if (empty($arg)) {
         return Console::halt("post directive needs arguments!");
     }
@@ -366,7 +488,7 @@ River::directiveInline("post", function ($ref, $arg, $exec) {
     return "\\System\\Controller\\Route::current()->req()->post($arg)";
 });
 
-River::directiveInline("param", function ($ref, $arg, $exec) {
+River::directiveInline("method.param", function ($ref, $arg, $exec) {
     if (empty($arg)) {
         return Console::halt("param directive needs arguments!");
     }
@@ -376,7 +498,7 @@ River::directiveInline("param", function ($ref, $arg, $exec) {
     return "\\System\\Controller\\Route::current()->req()->param($arg)";
 });
 
-River::directiveInline("file", function ($ref, $arg, $exec) {
+River::directiveInline("method.file", function ($ref, $arg, $exec) {
     if (empty($arg)) {
         return Console::halt("file directive needs arguments!");
     }

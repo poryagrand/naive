@@ -820,10 +820,6 @@ class Route{
         $res = self::call($URL_Request,strtolower($_SERVER['REQUEST_METHOD']));
         if( $res === false ){
             $res = self::call("fault/403","get");
-
-            //if( Console::isAutoFlush() && RouteRegister::getAttaches("api") === null && !RouteRegister::getAttaches("noConsole") ){
-            //    Console::flush();
-            //}
             
             if( !$res ){
                 throw new RouteHandleException("the route is not found and the error route is not accessable!");
@@ -840,7 +836,6 @@ class Route{
         self::fireEvent( "end",self::$_currentId,self::$_currentRouteRegister);
 
         if( Console::isAutoFlush() && RouteRegister::getAttaches("api") === null && !RouteRegister::getAttaches("noConsole") ){
-            //Console::log($URL_Request);
             Console::flush();
         }
     }

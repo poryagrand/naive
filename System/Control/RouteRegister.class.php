@@ -357,7 +357,7 @@ class RouteRegister{
                 return true;
             }
         }
-        catch(\Exception $e){
+        catch(\Throwable $e){
             Route::routeError();
             Console::error($e->getMessage(),"File: ".$e->getFile(),"Line: ".$e->getLine(),"\n Trace: ".$e->getTraceAsString());
             $__res = $this->fireError(Route::Others,$req,$res,$e);

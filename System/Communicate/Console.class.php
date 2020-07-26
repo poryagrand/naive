@@ -10,6 +10,18 @@ use System\Communicate\BasicSession;
  */
 class Console{
 
+    protected static $CustomConsoles = [
+        "console"=>[],
+        "log"=>[],
+        "info"=>[],
+        "error"=>[],
+        "warn"=>[],
+        "halt"=>[],
+        "debug"=>[]
+    ];
+
+    protected static $justCustom = false;
+
     /**
      * @brief tell system to flush/not flush data at end of each routing page
      */
@@ -25,6 +37,18 @@ class Console{
      */  
     private static $Data = array(); 
 
+    /**
+     * tells to system to run console event instead of write out in console of browser
+     * @param bool $is
+     */
+    public static function onlyFireCustomEvent($is){
+        self::$justCustom = !(!$is);
+    }
+
+    /**
+     * return the last error details
+     * @return Array
+     */
     public static function getLastError(){
         if( count(self::$allErrors) <= 0 ){
             return null;
@@ -141,12 +165,20 @@ class Console{
      * @param ... undefined and unlimited arguments
      */
     public static function log(){
+        $args = func_get_args();
         self::init();
+
+        foreach(self::$CustomConsoles["log"] as $event){
+            if( is_callable($event) ){
+                call_user_func($event,$args);
+            }
+        }
+
         array_push(
             self::$Data,
             array(
                 "type"=>"log",
-                "value"=>func_get_args()
+                "value"=>$args
             )
         );
         BasicSession::set("ConsoleData",self::$Data);
@@ -158,12 +190,20 @@ class Console{
      * @param ... undefined and unlimited arguments
      */
     public static function halt(){
+        $args = func_get_args();
         self::init();
+
+        foreach(self::$CustomConsoles["halt"] as $event){
+            if( is_callable($event) ){
+                call_user_func($event,$args);
+            }
+        }
+
         array_push(
             self::$Data,
             array(
                 "type"=>"halt",
-                "value"=>func_get_args()
+                "value"=>$args
             )
         );
         BasicSession::set("ConsoleData",self::$Data);
@@ -176,12 +216,20 @@ class Console{
      * @param ... undefined and unlimited arguments
      */
     public static function error(){
+        $args = func_get_args();
         self::init();
+
+        foreach(self::$CustomConsoles["error"] as $event){
+            if( is_callable($event) ){
+                call_user_func($event,$args);
+            }
+        }
+
         array_push(
             self::$Data,
             array(
                 "type"=>"error",
-                "value"=>func_get_args()
+                "value"=>$args
             )
         );
         BasicSession::set("ConsoleData",self::$Data);
@@ -193,12 +241,20 @@ class Console{
      * @param ... undefined and unlimited arguments
      */
     public static function warn(){
+        $args = func_get_args();
         self::init();
+
+        foreach(self::$CustomConsoles["warn"] as $event){
+            if( is_callable($event) ){
+                call_user_func($event,$args);
+            }
+        }
+
         array_push(
             self::$Data,
             array(
                 "type"=>"warn",
-                "value"=>func_get_args()
+                "value"=>$args
             )
         );
         BasicSession::set("ConsoleData",self::$Data);
@@ -210,12 +266,20 @@ class Console{
      * @param ... undefined and unlimited arguments
      */
     public static function info(){
+        $args = func_get_args();
         self::init();
+
+        foreach(self::$CustomConsoles["info"] as $event){
+            if( is_callable($event) ){
+                call_user_func($event,$args);
+            }
+        }
+
         array_push(
             self::$Data,
             array(
                 "type"=>"info",
-                "value"=>func_get_args()
+                "value"=>$args
             )
         );
         BasicSession::set("ConsoleData",self::$Data);
@@ -227,12 +291,20 @@ class Console{
      * @param ... undefined and unlimited arguments
      */
     public static function debug(){
+        $args = func_get_args();
         self::init();
+
+        foreach(self::$CustomConsoles["debug"] as $event){
+            if( is_callable($event) ){
+                call_user_func($event,$args);
+            }
+        }
+
         array_push(
             self::$Data,
             array(
                 "type"=>"debug",
-                "value"=>func_get_args()
+                "value"=>$args
             )
         );
         BasicSession::set("ConsoleData",self::$Data);
@@ -247,14 +319,24 @@ class Console{
             return;
         }
 
-        if(!self::$showConsoles){
+        self::init();
+
+        foreach(self::$CustomConsoles["console"] as $event){
+            if( is_callable($event) ){
+                call_user_func($event,self::$Data);
+            }
+        }
+
+        if(!self::$showConsoles || self::$justCustom){
             BasicSession::remove("ConsoleData");
             BasicSession::set("ConsoleData",[]);
             return;
         }
 
-        self::init();
+        
         $isHalt = false;
+        
+
         if(count(self::$Data) > 0){
             $consoles = "";
             foreach(self::$Data as $val){
@@ -268,13 +350,53 @@ class Console{
             }
             
             echo "<script>".$consoles."</script>";
+
+            
         }
 
-      
+        //file_put_contents(__ROOT__."/debug.log","Console: " . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}".PHP_EOL , FILE_APPEND | LOCK_EX);
         BasicSession::remove("ConsoleData");
         BasicSession::set("ConsoleData",[]);
         if( $isHalt ){
             die();
+        }
+    }
+
+
+    public static function onConsole($call){
+        if(is_callable($call)){
+            self::$CustomConsoles["console"][] = $call;
+        }
+    }
+
+    public static function onWarn($call){
+        if(is_callable($call)){
+            self::$CustomConsoles["warn"][] = $call;
+        }
+    }
+    public static function onError($call){
+        if(is_callable($call)){
+            self::$CustomConsoles["error"][] = $call;
+        }
+    }
+    public static function onLog($call){
+        if(is_callable($call)){
+            self::$CustomConsoles["log"][] = $call;
+        }
+    }
+    public static function onDebug($call){
+        if(is_callable($call)){
+            self::$CustomConsoles["debug"][] = $call;
+        }
+    }
+    public static function onHalt($call){
+        if(is_callable($call)){
+            self::$CustomConsoles["halt"][] = $call;
+        }
+    }
+    public static function onInfo($call){
+        if(is_callable($call)){
+            self::$CustomConsoles["info"][] = $call;
         }
     }
 }

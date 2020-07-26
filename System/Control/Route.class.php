@@ -1169,6 +1169,9 @@ class Route{
      * @return bool
      */
     static public function validateUrl($url){
+        if( !preg_match('/^http/',$url) ){
+            $url = "http://".$url;
+        }
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             return false;
         }
